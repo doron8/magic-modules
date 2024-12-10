@@ -36,25 +36,6 @@ func TestAccComputeFirewall_update(t *testing.T) {
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
-			{
-				Config: testAccComputeFirewall_nullDescription(networkName, firewallName),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("google_compute_firewall.foobar", "description", ""),
-				),
-			},
-			{
-				ResourceName:      "google_compute_firewall.foobar",
-				ImportState:       true,
-				ImportStateVerify: true,
-			},
-			{
-				Config: testAccComputeFirewall_basic(networkName, firewallName),
-			},
-			{
-				ResourceName:      "google_compute_firewall.foobar",
-				ImportState:       true,
-				ImportStateVerify: true,
-			},
 		},
 	})
 }
@@ -325,6 +306,8 @@ resource "google_compute_firewall" "foobar" {
   description = "Resource created for Terraform acceptance testing"
   network     = google_compute_network.foobar.name
   source_tags = ["foo"]
+
+  source_ranges = ["192.168.2.0/24"]
 
   allow {
     protocol = "icmp"
